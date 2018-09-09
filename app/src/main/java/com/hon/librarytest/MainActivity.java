@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.hon.librarytest.diffutil.DiffAdapter;
+import com.hon.librarytest.diffutil.DiffUtilActivity;
 import com.hon.librarytest.disklrucache.DiskLruCacheActivity;
 import com.hon.librarytest.eventbus.EventBusActivity;
 import com.hon.librarytest.glide.GlideActivity;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity{
         mItemList.add("Web View");
         mItemList.add("Photo View");
         mItemList.add("Notification Oreo");
-        mItemList.add("DiskLruCache in OkHttp");
+        mItemList.add("DiffUtil");
         mItemList.add("DiskLruCache in OkHttp");
         mItemList.add("DiskLruCache in OkHttp");
         mItemList.add("DiskLruCache in OkHttp");
@@ -93,6 +95,9 @@ public class MainActivity extends AppCompatActivity{
                                     break;
                                 case 6:
                                     startActivity(NotificationActivity.class);
+                                    break;
+                                case 7:
+                                    startActivity(DiffUtilActivity.class);
                                     break;
                                 default:
                                     break;

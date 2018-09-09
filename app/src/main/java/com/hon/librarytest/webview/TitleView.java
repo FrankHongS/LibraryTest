@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.hon.librarytest.R;
+
 /**
  * Created by Frank on 2018/3/10.
  * E-mail:frank_hon@foxmail.com
@@ -37,7 +39,7 @@ public class TitleView extends View {
 
         TypedArray a=context.obtainStyledAttributes(attrs,R.styleable.TitleView);
         mTopColorId=a.getResourceId(R.styleable.TitleView_topColor,R.color.titleViewDefaultColor);
-        mBottomColorId=a.getResourceId(R.styleable.TitleView_bottomColor,R.color.titleViewDefaultColor);
+        mBottomColorId=a.getResourceId(R.styleable.TitleView_bottomColor, R.color.titleViewDefaultColor);
         mMiddleLineColorId=a.getResourceId(R.styleable.TitleView_middleLineColor,R.color.titleViewDefaultColor);
         a.recycle();
 

@@ -25,7 +25,7 @@ public class LibraryTest extends Application{
         }
     }
 
-    private boolean ExistSDCard() {
+    public static boolean ExistSDCard() {
         return android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
     }
 }
