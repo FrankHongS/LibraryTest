@@ -28,7 +28,7 @@
             android:theme="@style/NoTitleTheme"/>
         <activity android:name=".webview.WebViewActivity"/>
         <activity android:name=".photoview.PhotoViewActivity"
-            android:theme="@style/NoTitleTheme"/>
+            android:theme="@style/Theme.Design.NoActionBar"/>
         <activity android:name=".notificationoreo.NotificationActivity"/>
         <activity android:name=".diffutil.DiffUtilActivity" />
 

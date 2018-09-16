@@ -58,7 +58,7 @@ public class PhotoViewPagerAdapter<E> extends PagerAdapter {
             case ImageData.URL:
                 Glide.with(mContext)
                         .load(mImageData.getData().get(position))
-//                        .placeholder(R.mipmap.placeholder)
+                        .placeholder(R.mipmap.placeholder)
                         .dontTransform()
                         .into(photoView);
                 break;

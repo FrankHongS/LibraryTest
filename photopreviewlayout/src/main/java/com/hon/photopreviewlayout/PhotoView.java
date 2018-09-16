@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -23,10 +24,12 @@ import android.view.ViewTreeObserver;
 public class PhotoView extends AppCompatImageView implements ViewTreeObserver.OnGlobalLayoutListener,
         ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener {
 
-    private boolean mIsFirstTime = true;
+    private static final String TAG = PhotoView.class.getSimpleName();
+
+    private Drawable mOriginalDrawable=null;
 
     // initial scale
-    private float mInitScale;
+    private float mInitScale=-1;
     // maximum scale
     private float mMaxScale;
 
@@ -41,7 +44,6 @@ public class PhotoView extends AppCompatImageView implements ViewTreeObserver.On
     private boolean mCanMove = false;
 
     private float mTouchSlop;
-
     // double tap
     private GestureDetector mGestureDetector;
 
@@ -85,34 +87,38 @@ public class PhotoView extends AppCompatImageView implements ViewTreeObserver.On
 
     @Override
     public void onGlobalLayout() {
-        if (mIsFirstTime) {
 
-            int width = getWidth();
-            int height = getHeight();
+        int width = getWidth();
+        int height = getHeight();
 
-            Drawable d = getDrawable();
+        Drawable d = getDrawable();
 
-            if (d == null)
-                return;
+        if (d == null)
+            return;
 
-            int dw = d.getIntrinsicWidth();
-            int dh = d.getIntrinsicHeight();
+        if(mOriginalDrawable==d)
+            return;
 
-            float scale = Math.min(width / (float) dw, height / (float) dh) >= 1 ?
-                    1.0f : Math.min(width / (float) dw, height / (float) dh);
+        mOriginalDrawable=d;
 
-            mInitScale = scale;
-            mMaxScale = 4 * scale;
+        int dw = d.getIntrinsicWidth();
+        int dh = d.getIntrinsicHeight();
 
-            int dx = width / 2 - dw / 2;
-            int dy = height / 2 - dh / 2;
+        float scale = Math.min(width / (float) dw, height / (float) dh);
 
-            mScaleMatrix.postTranslate(dx, dy);
-            mScaleMatrix.postScale(mInitScale, mInitScale, width / 2f, height / 2f);
-            setImageMatrix(mScaleMatrix);
 
-            mIsFirstTime = false;
-        }
+        mScaleMatrix.reset();
+
+        int dx = width / 2 - dw / 2;
+        int dy = height / 2 - dh / 2;
+
+        mScaleMatrix.postTranslate(dx, dy);
+        mScaleMatrix.postScale(scale, scale, width / 2f, height / 2f);
+        setImageMatrix(mScaleMatrix);
+
+        mInitScale = scale;
+        mMaxScale = 4 * scale;
+
     }
 
     @Override
