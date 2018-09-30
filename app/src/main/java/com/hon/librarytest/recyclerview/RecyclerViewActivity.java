@@ -1,0 +1,17 @@
+package com.hon.librarytest.recyclerview;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+
+/**
+ * Created by Frank_Hon on 9/30/2018.
+ * E-mail: v-shhong@microsoft.com
+ */
+public class RecyclerViewActivity extends AppCompatActivity{
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+}
