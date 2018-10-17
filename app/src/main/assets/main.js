@@ -2,8 +2,14 @@ var originFontSize;
 
 $(function(){
         $('.headline').remove();
-        $('.meta').remove();
         $('.view-more').remove();
+
+        $('img').parent().css({
+            'line-height': 0+'px',
+            'margin-left': 0+'px',
+            'margin-right': 0+'px',
+            'padding': 0+'px'
+        });
 
 		var img=$('.content img');
 		var imgSrc=new Array();

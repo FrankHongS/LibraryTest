@@ -242,7 +242,7 @@ ol {
 }
 .question {
   overflow: hidden;
-  padding: 0 20px!important;
+  /*padding: 0 20px!important;*/
 }
 .question + .question {
   border-top: 5px solid #f6f6f6;
@@ -253,6 +253,7 @@ ol {
   font-weight: 700;
   font-size: 18px;
   margin: 20px 0;
+  text-align: center;
 }
 .meta .author {
   color: #444;

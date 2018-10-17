@@ -24,8 +24,9 @@ public class SwipeBackTestActivity extends SwipeBackActivity{
         super.onCreate(savedInstanceState);
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_in_left);
         setContentView(R.layout.activity_swipe_back_test);
-        getSwipeBackLayout().setEdgeTrackingEnabled(me.imid.swipebacklayout.lib.SwipeBackLayout.EDGE_LEFT);
+        getSwipeBackLayout().setEdgeTrackingEnabled(me.imid.swipebacklayout.lib.SwipeBackLayout.EDGE_RIGHT);
 //        mSwipeBackLayout= (SwipeBackLayout) LayoutInflater.from(this)
 //                .inflate(com.hon.swipebacklayout.R.layout.layout_swipe_back,null);
     }
@@ -34,5 +35,11 @@ public class SwipeBackTestActivity extends SwipeBackActivity{
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 //        mSwipeBackLayout.attachToActivity(this);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_out_right,R.anim.slide_out_right);
     }
 }

@@ -33,6 +33,21 @@
         <activity android:name=".diffutil.DiffUtilActivity" />
         <activity android:name=".paging.PagingActivity" />
         <activity android:name=".recyclerview.RecyclerViewActivity" />
+        <activity android:name=".arouter.ARouterActivity" />
+        <activity android:name=".arouter.TestActivity" />
+        <activity android:name=".arouter.SchemaFilterActivity">
+            <intent-filter>
+                <data
+                    android:host="m.aliyun.com"
+                    android:scheme="arouter"/>
+
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".arouter.Test02Activity" />
 
     </application>
 

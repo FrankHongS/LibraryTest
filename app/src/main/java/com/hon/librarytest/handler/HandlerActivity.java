@@ -35,6 +35,8 @@ public class HandlerActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
     }
 
+
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

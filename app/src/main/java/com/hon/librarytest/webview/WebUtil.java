@@ -1,5 +1,14 @@
 package com.hon.librarytest.webview;
 
+import android.util.Log;
+import android.widget.Toast;
+
+import com.hon.librarytest.LibraryTest;
+import com.hon.librarytest.webview.vo.Profile;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by Frank on 2018/7/8.
  * E-mail:frank_hon@foxmail.com
@@ -31,5 +40,43 @@ public class WebUtil {
                 + body
                 + NATIVE_JS
                 + "</body></html>";
+    }
+
+    public static String filterBody(String body, Profile profile){
+        String profileStr="";
+        String result=body.replaceAll("\r|\n|\t","");
+        Pattern pattern=Pattern.compile("<div class=\"meta\".*avatar.*</span></div>");
+        Matcher matcher=pattern.matcher(result);
+        while (matcher.find()){
+            profileStr=matcher.group();
+        }
+        result=matcher.replaceAll("");
+        Log.e("hon", "result: "+result);
+
+        Log.e("hon", "profileStr: "+profileStr);
+        String avatar=matchString(profileStr, "(src=\")(.*)(\"><span)", 2);
+
+        String author=matchString(profileStr, "(<span class=\"author\">)(.*)(</span><span)", 2);
+
+        String bio=matchString(profileStr, "(<span class=\"bio\">)(.*)(</span>)", 2);
+
+        if(profile!=null){
+            profile.setAvatar(avatar);
+            profile.setAuthor(author);
+            profile.setBio(bio);
+        }
+
+        return result;
+    }
+
+    private static String matchString(String target, String regex,int groupIndex){
+        String result="";
+        Pattern p=Pattern.compile(regex);
+        Matcher m=p.matcher(target);
+        while(m.find()){
+            result=m.group(groupIndex);
+        }
+
+        return result;
     }
 }

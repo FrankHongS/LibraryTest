@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.hon.librarytest.R;
 import com.hon.librarytest.util.RetrofitUtil;
+import com.hon.librarytest.webview.vo.Profile;
 import com.hon.librarytest.webview.vo.ZhihuDailyContent;
 
 import io.reactivex.Observer;
@@ -145,7 +146,11 @@ public class WebViewActivity extends SwipeBackActivity {
 
     private void showContent(String body) {
 
-        String data=WebUtil.appendToHTML(body);
+        Profile profile=new Profile();
+
+        String data=WebUtil.appendToHTML(WebUtil.filterBody(body,profile));
+
+        Log.e("hon", "profile: "+profile);
 
         mWebView.loadDataWithBaseURL("x-data://base", data, "text/html", "utf-8", null);
 
