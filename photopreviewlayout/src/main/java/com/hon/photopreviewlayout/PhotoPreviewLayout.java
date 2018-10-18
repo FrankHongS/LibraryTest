@@ -64,4 +64,8 @@ public class PhotoPreviewLayout extends RelativeLayout{
     public void setViewPagerCurrentItem(int position){
         mViewPager.setCurrentItem(position);
     }
+
+    public int getCurrentItem(){
+        return mViewPager.getCurrentItem();
+    }
 }

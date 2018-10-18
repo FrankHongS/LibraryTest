@@ -1,5 +1,6 @@
 package com.hon.librarytest.util;
 
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -62,6 +63,16 @@ public class Util {
         long availableBlocks = stat.getAvailableBlocks();
         ret = availableBlocks * blockSize;
         return ret;
+    }
+
+    public static int dip2px(float dpValue) {
+        final float scale = LibraryTest.sLibraryTest.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+    public static int px2dip(float pxValue) {
+        final float scale = LibraryTest.sLibraryTest.getResources().getDisplayMetrics().density;
+        return (int) (pxValue / scale + 0.5f);
     }
 
 }

@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.hon.photopreviewlayout.PhotoPreviewLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ppl_image"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent">
+
+    <com.hon.photopreviewlayout.PhotoPreviewLayout
+        android:id="@+id/ppl_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        layout="@layout/layout_popup_title"/>
+
+</FrameLayout>

@@ -7,3 +7,8 @@ p{
 blockquote{
     margin: 0.5em 2em;
 }
+
+figcaption{
+	margin: 1.0em auto;
+	text-align: center;
+}

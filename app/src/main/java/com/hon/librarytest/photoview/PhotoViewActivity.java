@@ -1,19 +1,33 @@
 package com.hon.librarytest.photoview;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ListPopupWindow;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.hon.librarytest.R;
 import com.hon.librarytest.util.Constants;
+import com.hon.librarytest.util.ToastUtil;
+import com.hon.librarytest.util.Util;
 import com.hon.photopreviewlayout.ImageData;
 import com.hon.photopreviewlayout.PhotoPreviewLayout;
 import com.hon.photopreviewlayout.PhotoViewPagerAdapter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +44,9 @@ public class PhotoViewActivity extends AppCompatActivity{
     private ImageData<String> mImageData;
 
     private PhotoViewPagerAdapter mAdapter;
+
+    private String[] mStrData={"download"};
+    private int[] mImgData={R.drawable.ic_file_download_black_24dp};
 
     @SuppressWarnings("unchecked")
     @Override
@@ -69,4 +86,88 @@ public class PhotoViewActivity extends AppCompatActivity{
 
         mImageData=new ImageData<>(ImageData.URL,imageData);
     }
+
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.ib_back:
+                finish();
+                break;
+            case R.id.ib_more:
+                showPopupWindow(view);
+                break;
+            default:
+                break;
+        }
+    }
+
+    //todo
+    // difeerence between ListPopupWindow and MenuPopupWindow,
+    // check if it's possible to customize
+
+    private void showPopupWindow(View view){
+        ListPopupWindow popupWindow=new ListPopupWindow(this);
+        popupWindow.setAnchorView(view);
+        popupWindow.setWidth(Util.dip2px(150));
+//        popupWindow.setContentWidth();
+//        popupWindow.setHorizontalOffset(-view.getWidth()/2);
+//        popupWindow.setVerticalOffset(-view.getHeight()/2);
+        popupWindow.setModal(true);
+        popupWindow.setAdapter(new BaseAdapter() {
+            @Override
+            public int getCount() {
+                return mStrData.length;
+            }
+
+            @Override
+            public Object getItem(int position) {
+                return mStrData[position];
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return position;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view;
+                if(convertView==null){
+                    view= LayoutInflater.from(PhotoViewActivity.this).inflate(R.layout.item_popup,parent,false);
+                }else{
+                    view=convertView;
+                }
+
+                ImageView imageView=view.findViewById(R.id.iv_icon);
+                TextView textView=view.findViewById(R.id.tv_text);
+
+                imageView.setImageResource(mImgData[position]);
+                textView.setText(mStrData[position]);
+                textView.setOnClickListener(
+                        v-> {
+                            ToastUtil.showToast("position: "+position);
+                            downloadImageFromNetwork();
+                            popupWindow.dismiss();
+                        }
+                );
+
+                return view;
+            }
+        });
+        popupWindow.show();
+    }
+
+    private void downloadImageFromNetwork() {
+        String imageUrl=mImageData.getData().get(mPhotoPreviewLayout.getCurrentItem());
+        Glide.with(this)
+                .load(imageUrl)
+                .downloadOnly(new SimpleTarget<File>() {
+                    @Override
+                    public void onResourceReady(File resource, GlideAnimation<? super File> glideAnimation) {
+                        Uri uri=Uri.fromFile(resource);
+                        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+                        ToastUtil.showToast(uri.toString());
+                    }
+                });
+    }
+
 }

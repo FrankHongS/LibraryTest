@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -17,7 +18,9 @@ import com.hon.librarytest.eventbus.EventBusActivity;
 import com.hon.librarytest.glide.GlideActivity;
 import com.hon.librarytest.notificationoreo.NotificationActivity;
 import com.hon.librarytest.photoview.PhotoViewActivity;
+import com.hon.librarytest.popup.PopupActivity;
 import com.hon.librarytest.swipebacklayout.SwipeBackTestActivity;
+import com.hon.librarytest.util.PopupUtil;
 import com.hon.librarytest.webview.WebViewActivity;
 
 import java.util.ArrayList;
@@ -51,7 +54,7 @@ public class MainActivity extends AppCompatActivity{
         mItemList.add("Notification Oreo");
         mItemList.add("DiffUtil");
         mItemList.add("ARouter");
-        mItemList.add("DiskLruCache in OkHttp");
+        mItemList.add("Popup");
         mItemList.add("DiskLruCache in OkHttp");
         mItemList.add("DiskLruCache in OkHttp");
         mItemList.add("hi");
@@ -103,9 +106,22 @@ public class MainActivity extends AppCompatActivity{
                                 case 8:
                                     startActivity(ARouterActivity.class);
                                     break;
+                                case 9:
+                                    startActivity(PopupActivity.class);
+                                    break;
                                 default:
                                     break;
                             }
+                        }
+                );
+
+                viewHolder.mTextView.setOnLongClickListener(
+                        v -> {
+//                            PopupMenu popupMenu=new PopupMenu(MainActivity.this,v);
+//                            popupMenu.inflate(R.menu.menu_popup_menu);
+//                            popupMenu.show();
+                            PopupUtil.showListPopupWindow(MainActivity.this,v);
+                            return true;
                         }
                 );
             }

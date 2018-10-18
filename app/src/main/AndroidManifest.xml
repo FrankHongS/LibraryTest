@@ -3,6 +3,8 @@
     package="com.hon.librarytest">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".LibraryTest"
@@ -48,6 +50,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".arouter.Test02Activity" />
+        <activity android:name=".popup.PopupActivity" />
 
     </application>
 
