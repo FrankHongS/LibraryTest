@@ -1,10 +1,14 @@
 package com.hon.librarytest.photoview;
 
+import android.Manifest;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListPopupWindow;
 import android.view.LayoutInflater;
@@ -18,26 +22,36 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
+import com.hon.librarytest.AppExecutors;
+import com.hon.librarytest.BuildConfig;
 import com.hon.librarytest.R;
 import com.hon.librarytest.util.Constants;
+import com.hon.librarytest.util.FileUtil;
 import com.hon.librarytest.util.ToastUtil;
 import com.hon.librarytest.util.Util;
 import com.hon.photopreviewlayout.ImageData;
 import com.hon.photopreviewlayout.PhotoPreviewLayout;
 import com.hon.photopreviewlayout.PhotoViewPagerAdapter;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
+
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Frank on 2018/5/22.
  * E-mail:frank_hon@foxmail.com
  */
 
-public class PhotoViewActivity extends AppCompatActivity{
+public class PhotoViewActivity extends AppCompatActivity {
 
     private PhotoPreviewLayout mPhotoPreviewLayout;
 
@@ -45,18 +59,18 @@ public class PhotoViewActivity extends AppCompatActivity{
 
     private PhotoViewPagerAdapter mAdapter;
 
-    private String[] mStrData={"download"};
-    private int[] mImgData={R.drawable.ic_file_download_black_24dp};
+    private String[] mStrData = {"download"};
+    private int[] mImgData = {R.drawable.ic_file_download_black_24dp};
 
     @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_view_02);
-        mPhotoPreviewLayout=findViewById(R.id.ppl_image);
+        mPhotoPreviewLayout = findViewById(R.id.ppl_image);
 
         initData();
-        mAdapter=new PhotoViewPagerAdapter(this,mImageData);
+        mAdapter = new PhotoViewPagerAdapter(this, mImageData);
         mPhotoPreviewLayout.setViewPagerAdapter(mAdapter);
         mPhotoPreviewLayout.setViewPagerCurrentItem(3);
 //        Glide.with(this)
@@ -66,7 +80,7 @@ public class PhotoViewActivity extends AppCompatActivity{
 //                .into(mPhotoView);
     }
 
-    private void initData(){
+    private void initData() {
 //        Integer[] imageArray=new Integer[]{
 //                R.mipmap.placeholder
 //                R.mipmap.test,
@@ -75,20 +89,20 @@ public class PhotoViewActivity extends AppCompatActivity{
 //                R.mipmap.test04
 //        };
 
-        String[] imageArray=new String[]{
+        String[] imageArray = new String[]{
                 Constants.IMAGE_URI_01,
                 Constants.IMAGE_URI_01,
                 Constants.IMAGE_URI_01,
                 Constants.IMAGE_URI_02
         };
 
-        List<String> imageData= Arrays.asList(imageArray);
+        List<String> imageData = Arrays.asList(imageArray);
 
-        mImageData=new ImageData<>(ImageData.URL,imageData);
+        mImageData = new ImageData<>(ImageData.URL, imageData);
     }
 
-    public void onClick(View view){
-        switch (view.getId()){
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.ib_back:
                 finish();
                 break;
@@ -104,8 +118,8 @@ public class PhotoViewActivity extends AppCompatActivity{
     // difeerence between ListPopupWindow and MenuPopupWindow,
     // check if it's possible to customize
 
-    private void showPopupWindow(View view){
-        ListPopupWindow popupWindow=new ListPopupWindow(this);
+    private void showPopupWindow(View view) {
+        ListPopupWindow popupWindow = new ListPopupWindow(this);
         popupWindow.setAnchorView(view);
         popupWindow.setWidth(Util.dip2px(150));
 //        popupWindow.setContentWidth();
@@ -131,22 +145,21 @@ public class PhotoViewActivity extends AppCompatActivity{
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view;
-                if(convertView==null){
-                    view= LayoutInflater.from(PhotoViewActivity.this).inflate(R.layout.item_popup,parent,false);
-                }else{
-                    view=convertView;
+                if (convertView == null) {
+                    view = LayoutInflater.from(PhotoViewActivity.this).inflate(R.layout.item_popup, parent, false);
+                } else {
+                    view = convertView;
                 }
 
-                ImageView imageView=view.findViewById(R.id.iv_icon);
-                TextView textView=view.findViewById(R.id.tv_text);
+                ImageView imageView = view.findViewById(R.id.iv_icon);
+                TextView textView = view.findViewById(R.id.tv_text);
 
                 imageView.setImageResource(mImgData[position]);
                 textView.setText(mStrData[position]);
                 textView.setOnClickListener(
-                        v-> {
-                            ToastUtil.showToast("position: "+position);
-                            downloadImageFromNetwork();
+                        v -> {
                             popupWindow.dismiss();
+                            downloadImageFromNetwork();
                         }
                 );
 
@@ -157,17 +170,33 @@ public class PhotoViewActivity extends AppCompatActivity{
     }
 
     private void downloadImageFromNetwork() {
-        String imageUrl=mImageData.getData().get(mPhotoPreviewLayout.getCurrentItem());
+        String imageUrl = mImageData.getData().get(mPhotoPreviewLayout.getCurrentItem());
         Glide.with(this)
                 .load(imageUrl)
                 .downloadOnly(new SimpleTarget<File>() {
                     @Override
                     public void onResourceReady(File resource, GlideAnimation<? super File> glideAnimation) {
-                        Uri uri=Uri.fromFile(resource);
-                        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
-                        ToastUtil.showToast(uri.toString());
+                        saveToPicturesDir(resource);
                     }
                 });
     }
 
+    private void saveToPicturesDir(File resource) {
+        new RxPermissions(this)
+                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(
+                        granted -> {
+                            if (granted) {
+                                AppExecutors.getInstance().getIoExecutors()
+                                        .execute(
+                                                () -> {
+                                                    FileUtil.savePicturesToGallery(resource);
+                                                }
+                                        );
+
+
+                            }
+                        }
+                ).dispose();
+    }
 }

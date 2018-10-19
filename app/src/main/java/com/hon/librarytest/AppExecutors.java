@@ -1,5 +1,9 @@
 package com.hon.librarytest;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.NonNull;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -15,9 +19,12 @@ public class AppExecutors {
 
     private final Executor ioExecutors;
 
+    private final Executor mainExecutors;
+
     private AppExecutors(){
         this.diskExecutors=Executors.newSingleThreadExecutor();
         this.ioExecutors=Executors.newFixedThreadPool(3);
+        this.mainExecutors=new MainExecutor();
     }
 
     public static AppExecutors getInstance(){
@@ -38,5 +45,19 @@ public class AppExecutors {
 
     public Executor getIoExecutors() {
         return ioExecutors;
+    }
+
+    public Executor getMainExecutors() {
+        return mainExecutors;
+    }
+
+    private static class MainExecutor implements Executor{
+
+        private static final Handler HANDLER=new Handler(Looper.getMainLooper());
+
+        @Override
+        public void execute(@NonNull Runnable command) {
+            HANDLER.post(command);
+        }
     }
 }

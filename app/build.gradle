@@ -58,6 +58,10 @@ dependencies {
     implementation "com.alibaba:arouter-api:$rootProject.arouterApiVersion"
     annotationProcessor "com.alibaba:arouter-compiler:$rootProject.arouterCompilerVersion"
 
+    implementation ("com.github.tbruyelle:rxpermissions:$rootProject.rxPermissionVersion"){
+        exclude group: "com.android.support"
+    }
+
     // module swipebacklayout
     implementation project(':swipebacklayout')
     implementation project(':photopreviewlayout')
