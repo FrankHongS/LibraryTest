@@ -35,7 +35,7 @@ ext{
     arouterApiVersion='1.4.0'
     arouterCompilerVersion='1.2.1'
 
-    supportLibraryVersion='26.1.0'
+    supportLibraryVersion='27.0.2'
     glideVersion='3.7.0'
     glideTransformationVersion='2.0.2'
     retrofitVersion='2.3.0'

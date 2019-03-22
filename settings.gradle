@@ -1,1 +1,1 @@
-include ':app', ':swipebacklayout', ':photopreviewlayout', ':chatsdk'
+include ':app', ':swipebacklayout', ':photopreviewlayout', ':chatsdk', ':OptimizedRecyclerView'

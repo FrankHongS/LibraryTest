@@ -17,6 +17,7 @@ import com.hon.librarytest.disklrucache.DiskLruCacheActivity;
 import com.hon.librarytest.eventbus.EventBusActivity;
 import com.hon.librarytest.glide.GlideActivity;
 import com.hon.librarytest.notificationoreo.NotificationActivity;
+import com.hon.librarytest.pagerecyclerview.PageRecyclerViewActivity;
 import com.hon.librarytest.photoview.PhotoViewActivity;
 import com.hon.librarytest.popup.PopupActivity;
 import com.hon.librarytest.swipebacklayout.SwipeBackTestActivity;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity{
         mItemList.add("DiffUtil");
         mItemList.add("ARouter");
         mItemList.add("Popup");
-        mItemList.add("DiskLruCache in OkHttp");
+        mItemList.add("Page RecyclerView");
         mItemList.add("DiskLruCache in OkHttp");
         mItemList.add("hi");
 
@@ -108,6 +109,9 @@ public class MainActivity extends AppCompatActivity{
                                     break;
                                 case 9:
                                     startActivity(PopupActivity.class);
+                                    break;
+                                case 10:
+                                    startActivity(PageRecyclerViewActivity.class);
                                     break;
                                 default:
                                     break;

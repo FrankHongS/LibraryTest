@@ -51,6 +51,7 @@
         </activity>
         <activity android:name=".arouter.Test02Activity" />
         <activity android:name=".popup.PopupActivity" />
+        <activity android:name=".pagerecyclerview.PageRecyclerViewActivity" />
 
     </application>
 
