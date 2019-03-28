@@ -13,12 +13,12 @@ public class ScrollDetector {
 
     public void handleLoadMore(RecyclerView recyclerView){
         PageAdapter pageAdapter= (PageAdapter) recyclerView.getAdapter();
-        if(!pageAdapter.isLoading()&&isLastItem(recyclerView)){
+        if(pageAdapter.shouldLoadMore()&&isLastItem(recyclerView)){
             PageRecyclerView pageRecyclerView= (PageRecyclerView) recyclerView;
             PageRecyclerView.OnLoadMoreListener onLoadMoreListener=pageRecyclerView.getOnLoadMoreListener();
             if(onLoadMoreListener!=null){
-                onLoadMoreListener.onLoadMore();
                 pageAdapter.showLoading();
+                onLoadMoreListener.onLoadMore();
             }
         }
     }

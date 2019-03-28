@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import android.util.DisplayMetrics;
 
 import com.hon.librarytest.LibraryTest;
 
@@ -73,6 +74,16 @@ public class Util {
     public static int px2dip(float pxValue) {
         final float scale = LibraryTest.sLibraryTest.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
+    }
+
+    public static int getScreenHeight(){
+        DisplayMetrics dm = LibraryTest.sLibraryTest.getResources().getDisplayMetrics();
+        return dm.heightPixels;
+    }
+
+    public static int getScreenWidth(){
+        DisplayMetrics dm = LibraryTest.sLibraryTest.getResources().getDisplayMetrics();
+        return dm.widthPixels;
     }
 
 }

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.hon.librarytest.R;
+import com.hon.librarytest.util.Util;
 import com.hon.optimizedrecyclerviewlib.PageRecyclerView;
 import com.hon.optimizedrecyclerviewlib.item.PageItem;
 
@@ -28,7 +29,7 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
 
     private MyAdapter mAdapter;
 
-    private static final int ARRAY_LENGTH = 20;
+    private static final int ARRAY_LENGTH = 5;
     private List<PageItem> itemList=new ArrayList<>();
 
     @Override
@@ -36,7 +37,8 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_page_recycler);
 
-        for(int i=0;i<ARRAY_LENGTH;i++){
+        int length= Util.getScreenHeight()/getResources().getDimensionPixelSize(R.dimen.page_recycler_item_height);
+        for(int i=0;i<length;i++){
             itemList.add(new NormalItem(i+""));
         }
 
@@ -52,25 +54,69 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
 
+
         recyclerView.setOnLoadMoreListener(new PageRecyclerView.OnLoadMoreListener() {
+
+            int temp=0;
+
             @Override
             public void onLoadMore() {
                 Log.d(TAG, "onLoadMore: ");
                 Toast.makeText(PageRecyclerViewActivity.this, "onLoadMore", Toast.LENGTH_SHORT).show();
 
-                recyclerView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.hideLoading();
+                if(temp>6){
+                    mAdapter.showBottom();
+                    return;
+                }
 
-                        for(int i=0;i<5;i++){
-                            itemList.add(new NormalItem((i+20)+""));
-                        }
+                if(temp%3==0){
+                    normal();
+                }else if(temp%3==1){
+                    fetchSuccess();
+                }else if(temp%3==2){
+                    fetchFail();
+                }
 
-                        mAdapter.notifyItemRangeInserted(itemList.size()-5,5);
-                    }
-                },3000);
+
+                temp++;
+
             }
         });
+    }
+
+    private void normal(){
+        mAdapter.hideLoading();
+
+        for(int i=0;i<5;i++){
+            itemList.add(new NormalItem((i+20)+""));
+        }
+
+        mAdapter.notifyItemRangeInserted(itemList.size()-5,5);
+    }
+
+    private void fetchSuccess(){
+        recyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.hideLoading();
+
+                for(int i=0;i<5;i++){
+                    itemList.add(new NormalItem((i+20)+""));
+                }
+
+                mAdapter.notifyItemRangeInserted(itemList.size()-5,5);
+            }
+        },3000);
+    }
+
+    private void fetchFail(){
+        recyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.hideLoading();
+
+                Toast.makeText(PageRecyclerViewActivity.this, "fail", Toast.LENGTH_SHORT).show();
+            }
+        },3000);
     }
 }
